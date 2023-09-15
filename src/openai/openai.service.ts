@@ -6,6 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class OpenAiService {
   private openAi;
+
   constructor(
     private config: ConfigService,
     private prisma: PrismaService,
@@ -15,33 +16,63 @@ export class OpenAiService {
     });
   }
 
+  private async createAssistantResponse(
+    messages: Array<{ role: string; content: string }>,
+  ): Promise<string> {
+    const response = await this.openAi.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages,
+    });
+
+    return response.choices[0].message.content;
+  }
+
+  private async createConversationMessage(
+    role: string,
+    content: string,
+  ): Promise<void> {
+    await this.prisma.chatConversation.create({
+      data: {
+        role,
+        content,
+      },
+    });
+  }
+
   async askCoach(
     messages: Array<{ role: string; content: string }>,
   ): Promise<string> {
     try {
-      const response = await this.openAi.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: messages,
-      });
+      if (messages.some(({ content }) => content === '/status')) {
+        const aiResponse = await this.createAssistantResponse([
+          {
+            role: 'system',
+            content:
+              'Do you received as well my message and we can start work?',
+          },
+        ]);
 
-      await this.prisma.chatConversation.create({
-        data: {
-          role: messages[0].role,
-          content: messages[0].content,
-        },
-      });
+        await this.createConversationMessage(
+          messages[0].role,
+          messages[0].content,
+        );
+        await this.createConversationMessage('assistant', aiResponse);
 
-      const aiResponse = response.choices[0].message.content;
-      await this.prisma.chatConversation.create({
-        data: {
-          role: 'assistant',
-          content: aiResponse,
-        },
-      });
+        return aiResponse ?? 'Sorry, but something went wrong';
+      }
+
+      const aiResponse = await this.createAssistantResponse(messages);
+
+      await this.createConversationMessage(
+        messages[0].role,
+        messages[0].content,
+      );
+      await this.createConversationMessage('assistant', aiResponse);
+
       return aiResponse;
     } catch (error) {
       console.error('Error asking the coach:', error);
-      throw error;
+      throw new Error('Failed to ask the coach.');
     }
   }
 }
