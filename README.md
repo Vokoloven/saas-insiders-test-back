@@ -32,8 +32,9 @@ Test app builded by [Nest](https://github.com/nestjs/nest) framework.
 1. git clone https://github.com/Vokoloven/saas-insiders-test-back.git
 2. npm install
 3. Create .env in root of application.
-    - Add environment variable names from .env.example.dev
-    - Change USER and PASSWORD and DB from docker-compose.yml
+    - Add environment variable names from .env.example.dev to .env
+    - Change OPENAI_API_KEY on yours
+    - Change USER and PASSWORD and DB from docker-compose.yml into .env
 4. docker compose up users-db -d
 5. npx prisma db push
 ```
