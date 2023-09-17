@@ -35,7 +35,7 @@ Test app builded by [Nest](https://github.com/nestjs/nest) framework.
     - Add environment variable names from .env.example.dev to .env
     - Change OPENAI_API_KEY on yours
     - Change USER and PASSWORD and DB from docker-compose.yml into .env
-4. docker compose up users-db -d
+4. docker compose up db-openai -d
 5. npx prisma db push
 ```
 
