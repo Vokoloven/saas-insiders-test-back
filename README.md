@@ -24,12 +24,18 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Test app builded by [Nest](https://github.com/nestjs/nest) framework.
 
-## Installation
+## Installation on your PC
 
-```bash
-$ npm install
+```
+1. git clone https://github.com/Vokoloven/saas-insiders-test-back.git
+2. npm install
+3. Create .env in root of application.
+    - Add environment variable names from .env.example.dev
+    - Change USER and PASSWORD from docker-compose.yml
+4. docker compose up users-db -d
+5. npx prisma db push
 ```
 
 ## Running the app
@@ -43,31 +49,16 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+
 ```
 
-## Test
+## Endpoints
 
-```bash
-# unit tests
-$ npm run test
+```
+ Localhost - http://localhost:3333
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
-## Support
+### Contacts
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Anyway don't hesitate to contact me, you can find my contacts [here](https://github.com/Vokoloven).
