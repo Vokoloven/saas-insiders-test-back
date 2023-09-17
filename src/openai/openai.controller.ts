@@ -1,16 +1,21 @@
-// import { Controller, Post, Body } from '@nestjs/common';
-// import { OpenAiService } from './openai.service';
+import { Controller, Get, NotFoundException } from '@nestjs/common';
+import { OpenAiService } from './openai.service';
 
-// @Controller('openai')
-// export class OpenAiController {
-//   constructor(private readonly openAiService: OpenAiService) {}
+@Controller('openai')
+export class OpenAiController {
+  constructor(private readonly openAiService: OpenAiService) {}
 
-//   @Post('ask')
-//   async askCoach(
-//     @Body() body: { messages: Array<{ role: string; content: string }> },
-//   ): Promise<string> {
-//     const { messages } = body;
-//     const response = await this.openAiService.askCoach(messages);
-//     return response;
-//   }
-// }
+  @Get('')
+  async getAllChatConversations() {
+    try {
+      const chatConversation =
+        await this.openAiService.getAllChatConversations();
+      if (!Boolean(chatConversation.length)) {
+        throw new NotFoundException(`No chat conversations found`);
+      }
+      return chatConversation;
+    } catch (error) {
+      throw new Error(`Failed to get chat conversations: ${error.message}`);
+    }
+  }
+}

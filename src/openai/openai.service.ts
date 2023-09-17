@@ -39,26 +39,22 @@ export class OpenAiService {
     });
   }
 
+  async getAllChatConversations() {
+    try {
+      const chatConversation = await this.prisma.chatConversation.findMany();
+      return chatConversation;
+    } catch (error) {
+      console.error('Error getting chat conversations:', error);
+      throw new Error('Failed to retrieve chat conversations.');
+    }
+  }
+
   async askCoach(
     messages: Array<{ role: string; content: string }>,
-  ): Promise<string> {
+  ): Promise<{ role: string; content: string }> {
     try {
       if (messages.some(({ content }) => content === '/status')) {
-        const aiResponse = await this.createAssistantResponse([
-          {
-            role: 'system',
-            content:
-              'Do you received as well my message and we can start work?',
-          },
-        ]);
-
-        await this.createConversationMessage(
-          messages[0].role,
-          messages[0].content,
-        );
-        await this.createConversationMessage('assistant', aiResponse);
-
-        return aiResponse ?? 'Sorry, but something went wrong';
+        return { role: 'system', content: 'Chat work properly!' };
       }
 
       const aiResponse = await this.createAssistantResponse(messages);
@@ -69,7 +65,7 @@ export class OpenAiService {
       );
       await this.createConversationMessage('assistant', aiResponse);
 
-      return aiResponse;
+      return { role: 'assistant', content: aiResponse };
     } catch (error) {
       console.error('Error asking the coach:', error);
       throw new Error('Failed to ask the coach.');
