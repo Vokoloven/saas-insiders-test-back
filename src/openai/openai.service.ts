@@ -54,6 +54,9 @@ export class OpenAiService {
   ): Promise<{ role: string; content: string }> {
     try {
       if (messages.some(({ content }) => content === '/status')) {
+        await this.createConversationMessage('user', '/status');
+        await this.createConversationMessage('system', 'Chat work properly!');
+
         return { role: 'system', content: 'Chat work properly!' };
       }
 

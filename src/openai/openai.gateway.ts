@@ -20,7 +20,10 @@ export class OpenaiGateway {
       this.server.emit('aiResponse', response);
     } catch (error) {
       console.error('Error asking the coach:', error);
-      this.server.emit('aiResponse', 'Sorry, something went wrong.');
+      this.server.emit('aiResponse', {
+        role: 'system',
+        content: 'Sorry, something went wrong.',
+      });
     }
   }
 }
