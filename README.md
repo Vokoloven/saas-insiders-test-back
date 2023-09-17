@@ -33,7 +33,7 @@ Test app builded by [Nest](https://github.com/nestjs/nest) framework.
 2. npm install
 3. Create .env in root of application.
     - Add environment variable names from .env.example.dev
-    - Change USER and PASSWORD from docker-compose.yml
+    - Change USER and PASSWORD and DB from docker-compose.yml
 4. docker compose up users-db -d
 5. npx prisma db push
 ```
